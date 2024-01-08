@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:crafty_bay/presentation/ui/screens/auth/complete_profile_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(const OtpScreen());
+                      Get.to(const CompleteProfileScreen());
                     },
                     child: const Text("Next"),
                   ),

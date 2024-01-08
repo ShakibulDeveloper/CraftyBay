@@ -1,4 +1,5 @@
-import 'package:crafty_bay/presentation/ui/screens/otp_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/auth/otp_screen.dart';
+import 'package:crafty_bay/presentation/ui/widgets/input.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,8 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 24),
-                SizedBox(
-                  height: 45,
+                Input(
                   child: TextFormField(
                     decoration: const InputDecoration(
                       hintText: "Email Address",
