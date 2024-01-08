@@ -27,6 +27,11 @@ class AppThemeData {
         ),
       ),
     ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.grey,
+      ),
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       contentPadding: EdgeInsets.all(8),
       hintStyle: TextStyle(color: Colors.grey),

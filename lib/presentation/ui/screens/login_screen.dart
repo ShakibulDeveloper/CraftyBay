@@ -1,5 +1,7 @@
+import 'package:crafty_bay/presentation/ui/screens/otp_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -42,7 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(const OtpScreen());
+                    },
                     child: const Text("Next"),
                   ),
                 ),
