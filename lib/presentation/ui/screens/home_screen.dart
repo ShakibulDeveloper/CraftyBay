@@ -1,9 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
+import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/circular_icon_button.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/banner_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/section_title.dart';
+import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,21 +19,72 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            searchTextField,
-            const SizedBox(height: 16),
-            const BannerCarousel(),
-            const SizedBox(height: 16),
-            SectionTitle(
-              title: 'All Categories',
-              onTap: () {},
-            )
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              searchTextField,
+              const SizedBox(height: 16),
+              const BannerCarousel(),
+              const SizedBox(height: 16),
+              SectionTitle(
+                title: 'All Categories',
+                onTap: () {},
+              ),
+              categoryList,
+              SectionTitle(
+                title: 'Popular',
+                onTap: () {},
+              ),
+              productList,
+              const SizedBox(height: 16),
+              SectionTitle(
+                title: 'Special',
+                onTap: () {},
+              ),
+              productList,
+              const SizedBox(height: 16),
+              SectionTitle(
+                title: 'New',
+                onTap: () {},
+              ),
+              productList,
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  SizedBox get productList {
+    return SizedBox(
+      height: 180,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return const ProductCardItem();
+        },
+      ),
+    );
+  }
+
+  SizedBox get categoryList {
+    return SizedBox(
+      height: 110,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        primary: false,
+        shrinkWrap: true,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return const CategoryItem();
+        },
+        separatorBuilder: (_, __) {
+          return const SizedBox(width: 8);
+        },
       ),
     );
   }
