@@ -1,4 +1,4 @@
-import 'package:crafty_bay/presentation/ui/screens/auth/splash_screen.dart';
+import 'package:crafty_bay/controller_binder.dart';
 import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_theme_data.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ class CraftyBay extends StatelessWidget {
       home: const MainBottomNavScreen(),
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.appThemeData,
+      initialBinding: ControllerBinder(),
     );
   }
 }

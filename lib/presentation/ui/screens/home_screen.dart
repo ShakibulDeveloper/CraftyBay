@@ -1,4 +1,4 @@
-import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
+import 'package:crafty_bay/presentation/state_holder/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/circular_icon_button.dart';
@@ -6,6 +6,7 @@ import 'package:crafty_bay/presentation/ui/widgets/home/banner_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/section_title.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
               SectionTitle(
                 title: 'All Categories',
-                onTap: () {},
+                onTap: () {
+                  Get.find<MainBottomNavController>().changeIndex(1);
+                },
               ),
               categoryList,
               SectionTitle(
