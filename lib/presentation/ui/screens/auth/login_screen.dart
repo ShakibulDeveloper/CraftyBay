@@ -1,6 +1,7 @@
 import 'package:crafty_bay/presentation/state_holder/email_input_validation_controller.dart';
 import 'package:crafty_bay/presentation/state_holder/send_otp_to_email_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/otp_screen.dart';
+import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/input.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   GetBuilder<SendOtpToEmailController>(builder: (controller) {
                     return Visibility(
                       visible: controller.inProgress == false,
-                      replacement: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      replacement: const CenterCircularProgressIndicator(),
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -75,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   message: controller.errorMessage,
                                   duration: const Duration(seconds: 2),
                                   isDismissible: true,
+                                  backgroundColor: Colors.red,
                                 ));
                               }
                             }

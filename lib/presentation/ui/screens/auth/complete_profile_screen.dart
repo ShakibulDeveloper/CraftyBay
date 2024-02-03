@@ -1,4 +1,5 @@
 import 'package:crafty_bay/presentation/ui/screens/auth/otp_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/home_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/input.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offAll(const HomeScreen());
+                    },
                     child: const Text("Complete"),
                   ),
                 ),
