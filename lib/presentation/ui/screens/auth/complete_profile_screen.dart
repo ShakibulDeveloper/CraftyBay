@@ -80,9 +80,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(const OtpScreen());
-                    },
+                    onPressed: () {},
                     child: const Text("Complete"),
                   ),
                 ),

@@ -8,7 +8,8 @@ import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final String email;
+  const OtpScreen({super.key, required this.email});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
