@@ -2,7 +2,6 @@ import 'package:crafty_bay/presentation/state_holder/email_input_validation_cont
 import 'package:crafty_bay/presentation/state_holder/send_otp_to_email_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/otp_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
-import 'package:crafty_bay/presentation/ui/widgets/input.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

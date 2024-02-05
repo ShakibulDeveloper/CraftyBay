@@ -1,6 +1,7 @@
 import 'package:crafty_bay/data/models/response_data.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
+import 'package:crafty_bay/presentation/state_holder/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holder/read_profile_data_controller.dart';
 import 'package:get/get.dart';
 
@@ -25,12 +26,16 @@ class OtpVerificationController extends GetxController {
     _inProgress = false;
     if (response.isSuccess) {
       _token = response.responseData['data'];
-      await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 2));
       final result =
           await Get.find<ReadProfileDataController>().readProfileData(token);
       if (result) {
         _shouldNavigateCompleteProfile =
             Get.find<ReadProfileDataController>().isProfileCompleted == false;
+        if (_shouldNavigateCompleteProfile == false) {
+          Get.find<AuthController>().saveUserDetails(
+              token, Get.find<ReadProfileDataController>().profile);
+        }
       } else {
         _errorMessage = Get.find<ReadProfileDataController>().errorMessage;
         update();

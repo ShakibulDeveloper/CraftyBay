@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:crafty_bay/data/models/profile.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
@@ -30,10 +28,10 @@ class ReadProfileDataController extends GetxController {
     _inProgress = false;
     if (response.isSuccess) {
       final profileData = response.responseData['data'];
-      if (profileData.toString() == '[]') {
+      if (profileData.isEmpty) {
         _isProfileCompleted = false;
       } else {
-        _profile = Profile.fromJson(profileData);
+        _profile = Profile.fromJson(profileData[0]);
         _isProfileCompleted = true;
       }
       update();

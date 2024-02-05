@@ -1,4 +1,6 @@
+import 'package:crafty_bay/presentation/state_holder/auth_controller.dart';
 import 'package:crafty_bay/presentation/state_holder/main_bottom_nav_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/auth/login_screen.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
@@ -124,7 +126,10 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         CircularIconButton(
           iconData: Icons.person_outline,
-          onTap: () {},
+          onTap: () async {
+            await AuthController.clearAuthData();
+            Get.offAll(() => const LoginScreen());
+          },
         ),
         const SizedBox(width: 8),
         CircularIconButton(

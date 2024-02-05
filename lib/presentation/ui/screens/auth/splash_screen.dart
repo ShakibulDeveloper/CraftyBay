@@ -1,4 +1,6 @@
+import 'package:crafty_bay/presentation/state_holder/auth_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/login_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,6 +43,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> splashScreenTimeOut() async {
     await Future.delayed(const Duration(seconds: 2));
-    Get.offAll(const LoginScreen());
+    final bool isLoggedIn = await Get.find<AuthController>().isUserLoggedIn();
+    if (isLoggedIn) {
+      Get.offAll(() => const MainBottomNavScreen());
+    } else {
+      Get.offAll(const LoginScreen());
+    }
   }
 }
