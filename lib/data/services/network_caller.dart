@@ -5,9 +5,13 @@ import 'package:crafty_bay/data/models/response_data.dart';
 import 'package:http/http.dart';
 
 class NetworkCaller {
-  static Future<ResponseData> getRequest(String url) async {
+  static Future<ResponseData> getRequest(String url, {String? token}) async {
     log(url);
-    final response = await get(Uri.parse(url));
+    log(token.toString());
+    final response = await get(Uri.parse(url), headers: {
+      'token': token.toString(),
+      'Content-Type': 'application/json',
+    });
     log(response.statusCode.toString());
     log(response.body.toString());
     if (response.statusCode == 200) {
@@ -23,7 +27,7 @@ class NetworkCaller {
           isSuccess: false,
           statusCode: response.statusCode,
           responseData: decodeResponse,
-          errorMessage: decodeResponse["date"] ?? 'Something went wrong!',
+          errorMessage: 'Something went wrong!',
         );
       }
     } else {

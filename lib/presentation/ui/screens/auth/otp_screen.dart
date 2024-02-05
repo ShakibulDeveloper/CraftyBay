@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:crafty_bay/presentation/state_holder/otp_verification_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/complete_profile_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/logo.dart';
@@ -105,7 +106,11 @@ class _OtpScreenState extends State<OtpScreen> {
                                 _otpTEController.text,
                               );
                               if (result) {
-                                Get.to(const CompleteProfileScreen());
+                                if (controller.shouldNavigateCompleteProfile) {
+                                  Get.to(() => const CompleteProfileScreen());
+                                } else {
+                                  Get.offAll(() => const MainBottomNavScreen());
+                                }
                               } else {
                                 Get.showSnackbar(GetSnackBar(
                                   title: 'OTP Verification Failed!',
