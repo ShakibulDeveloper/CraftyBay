@@ -1,14 +1,23 @@
+import 'package:crafty_bay/data/models/product.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_details_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductCardItem extends StatelessWidget {
+class ProductCardItem extends StatefulWidget {
+  final Product productList;
+
   const ProductCardItem({
     super.key,
+    required this.productList,
   });
 
+  @override
+  State<ProductCardItem> createState() => _ProductCardItemState();
+}
+
+class _ProductCardItemState extends State<ProductCardItem> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,26 +30,30 @@ class ProductCardItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 4),
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(14),
                   topRight: Radius.circular(14),
                 ),
-                child: Image.asset(
-                  AssetsPath.dummyProductImage,
-                  width: 120,
+                child: Center(
+                  child: Image.network(
+                    widget.productList.image.toString() ?? '',
+                    width: 100,
+                  ),
                 ),
               ),
+              const SizedBox(height: 4),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Nike Shoe 25th Special Edition",
+                    Text(
+                      widget.productList.title ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: Colors.black54,
@@ -49,24 +62,24 @@ class ProductCardItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "\$120",
-                          style: TextStyle(
+                        Text(
+                          '\$${widget.productList.price}' ?? '',
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryColor,
                           ),
                         ),
-                        const Wrap(
+                        Wrap(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.star,
                               size: 14,
                               color: Colors.amber,
                             ),
                             Text(
-                              "4.5",
-                              style: TextStyle(
+                              widget.productList.star.toString() ?? '',
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black54,

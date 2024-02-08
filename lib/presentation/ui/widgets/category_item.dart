@@ -23,6 +23,7 @@ class _CategoryItemState extends State<CategoryItem> {
       onTap: () {
         Get.to(ProductListScreen(
           category: widget.categoryList.categoryName.toString() ?? '',
+          categoryId: widget.categoryList.id,
         ));
       },
       child: Column(
