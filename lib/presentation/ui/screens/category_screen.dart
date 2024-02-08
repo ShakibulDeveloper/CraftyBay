@@ -1,5 +1,7 @@
+import 'package:crafty_bay/presentation/state_holder/category_item_controller.dart';
 import 'package:crafty_bay/presentation/state_holder/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
+import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,17 +39,31 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 0.95,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 12,
-            ),
-            itemBuilder: (context, index) {
-              return const FittedBox(child: CategoryItem());
-            },
-          ),
+          child: GetBuilder<CategoryItemController>(
+              builder: (categoryItemController) {
+            return Visibility(
+              visible: categoryItemController.inProgress == false,
+              replacement: const CenterCircularProgressIndicator(),
+              child: GridView.builder(
+                itemCount: categoryItemController
+                        .categoryItemModel.categoryList?.length ??
+                    0,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 0.95,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 12,
+                ),
+                itemBuilder: (context, index) {
+                  return FittedBox(
+                      child: CategoryItem(
+                    categoryList: categoryItemController
+                        .categoryItemModel.categoryList![index],
+                  ));
+                },
+              ),
+            );
+          }),
         ),
       ),
     );

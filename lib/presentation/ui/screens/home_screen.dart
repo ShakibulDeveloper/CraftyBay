@@ -1,9 +1,12 @@
 import 'package:crafty_bay/presentation/state_holder/auth_controller.dart';
+import 'package:crafty_bay/presentation/state_holder/category_item_controller.dart';
+import 'package:crafty_bay/presentation/state_holder/home_banner_controller.dart';
 import 'package:crafty_bay/presentation/state_holder/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/login_screen.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
+import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/circular_icon_button.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/banner_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/section_title.dart';
@@ -31,7 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 8),
               searchTextField,
               const SizedBox(height: 16),
-              const BannerCarousel(),
+              GetBuilder<HomeBannerController>(builder: (homeBannerController) {
+                return Visibility(
+                  visible: homeBannerController.inProgress == false,
+                  replacement: const CenterCircularProgressIndicator(),
+                  child: BannerCarousel(
+                    bannerList:
+                        homeBannerController.bannerListModel.bannerList ?? [],
+                  ),
+                );
+              }),
               const SizedBox(height: 16),
               SectionTitle(
                 title: 'All Categories',
@@ -82,18 +94,30 @@ class _HomeScreenState extends State<HomeScreen> {
   SizedBox get categoryList {
     return SizedBox(
       height: 110,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        primary: false,
-        shrinkWrap: true,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return const CategoryItem();
-        },
-        separatorBuilder: (_, __) {
-          return const SizedBox(width: 8);
-        },
-      ),
+      child:
+          GetBuilder<CategoryItemController>(builder: (categoryItemController) {
+        return Visibility(
+          visible: categoryItemController.inProgress == false,
+          replacement: const CenterCircularProgressIndicator(),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            primary: false,
+            shrinkWrap: true,
+            itemCount:
+                categoryItemController.categoryItemModel.categoryList?.length ??
+                    0,
+            itemBuilder: (context, index) {
+              return CategoryItem(
+                categoryList: categoryItemController
+                    .categoryItemModel.categoryList![index],
+              );
+            },
+            separatorBuilder: (_, __) {
+              return const SizedBox(width: 8);
+            },
+          ),
+        );
+      }),
     );
   }
 

@@ -31,7 +31,9 @@ class _OtpScreenState extends State<OtpScreen> {
         timer.cancel();
       }
       otpCount--;
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
