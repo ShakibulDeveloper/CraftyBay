@@ -1,7 +1,7 @@
 import 'package:crafty_bay/data/models/brand.dart';
 import 'package:crafty_bay/data/models/category.dart';
 
-class Product {
+class ProductModel {
   int? id;
   String? title;
   String? shortDes;
@@ -10,7 +10,7 @@ class Product {
   String? discountPrice;
   String? image;
   int? stock;
-  double? star;
+  int? star;
   String? remark;
   int? categoryId;
   int? brandId;
@@ -19,7 +19,7 @@ class Product {
   Brand? brand;
   Category? category;
 
-  Product(
+  ProductModel(
       {this.id,
       this.title,
       this.shortDes,
@@ -37,7 +37,7 @@ class Product {
       this.brand,
       this.category});
 
-  Product.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     shortDes = json['short_des'];

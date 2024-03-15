@@ -109,9 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SizedBox productList(List<Product> productList) {
+  SizedBox productList(List<ProductModel> productList) {
     return SizedBox(
-      height: 150,
+      height: 170,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: productList.length,

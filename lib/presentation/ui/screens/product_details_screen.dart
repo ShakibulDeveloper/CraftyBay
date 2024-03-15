@@ -1,11 +1,23 @@
+import 'package:crafty_bay/data/models/product_details_data.dart';
+import 'package:crafty_bay/presentation/state_holder/add_to_cart_controller.dart';
+import 'package:crafty_bay/presentation/state_holder/auth_controller.dart';
+import 'package:crafty_bay/presentation/state_holder/product_details_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/auth/login_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
+import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/color_selector.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/product_details_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/size_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  final int productId;
+
+  const ProductDetailsScreen({
+    super.key,
+    required this.productId,
+  });
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -21,7 +33,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Colors.amber,
     Colors.black,
   ];
-  Color _selectedColor = Colors.blueGrey;
+  Color? _selectedColor;
 
   List<String> size = [
     'S',
@@ -31,7 +43,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     'XXL',
     'XXXL',
   ];
-  String _selectedSize = 'S';
+  String? _selectedSize;
 
   cartIncrement() {
     itemCounter++;
@@ -43,6 +55,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       itemCounter--;
       setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Get.find<ProductDetailsController>().getProductDetails(widget.productId);
   }
 
   @override
@@ -58,25 +76,38 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         elevation: 3,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const ProductDetailsCarousel(),
-                  productDetailsBody,
-                ],
+      body: GetBuilder<ProductDetailsController>(
+          builder: (productDetailsController) {
+        if (productDetailsController.inProgress) {
+          return const CenterCircularProgressIndicator();
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ProductDetailsCarousel(
+                      urls: [
+                        productDetailsController.productDetails.img1 ?? '',
+                        productDetailsController.productDetails.img2 ?? '',
+                        productDetailsController.productDetails.img3 ?? '',
+                        productDetailsController.productDetails.img4 ?? '',
+                      ],
+                    ),
+                    productDetailsBody(productDetailsController.productDetails),
+                  ],
+                ),
               ),
             ),
-          ),
-          totalPriceAndAddToCart,
-        ],
-      ),
+            totalPriceAndAddToCart,
+          ],
+        );
+      }),
     );
   }
 
-  Padding get productDetailsBody {
+  Padding productDetailsBody(ProductDetailsData productDetailsData) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -86,10 +117,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  "Happy New Year Special Deal Save 30%",
-                  style: TextStyle(
+                  productDetailsData.product?.title ?? '',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -141,16 +172,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           const SizedBox(height: 8),
           Row(
             children: [
-              const Wrap(
+              Wrap(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.star,
                     size: 14,
                     color: Colors.amber,
                   ),
                   Text(
-                    "4.5",
-                    style: TextStyle(
+                    productDetailsData.product?.star!.toStringAsFixed(1) ??
+                        0.toString(),
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.black54,
@@ -193,7 +225,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           const SizedBox(height: 4),
           ColorSelector(
-            colors: colors,
+            colors: productDetailsData.color
+                    ?.split(',')
+                    .map((e) => getColorFromString(e))
+                    .toList() ??
+                [],
             onChange: (selectedColor) {
               _selectedColor = selectedColor;
             },
@@ -208,7 +244,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           const SizedBox(height: 4),
           SizeSelector(
-            size: size,
+            size: productDetailsData.size?.split(',') ?? [],
             onChange: (selectedSize) {
               _selectedSize = selectedSize;
             },
@@ -222,13 +258,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            "Lorem Ipsum is simply dummy text of the printing and "
-            "typesetting industry. Lorem Ipsum has been the "
-            "industry's standard dummy text ever since the 1500s, "
-            "when an unknown printer took a galley "
-            "of type and scrambled it to make a type specimen book.",
-            style: TextStyle(
+          Text(
+            productDetailsData.des ?? '',
+            style: const TextStyle(
               fontSize: 12,
               color: Colors.grey,
             ),
@@ -271,9 +303,89 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ],
           ),
-          ElevatedButton(onPressed: () {}, child: const Text("Add To Cart")),
+          GetBuilder<AddToCartController>(builder: (addToCartController) {
+            return Visibility(
+              visible: addToCartController.inProgress == false,
+              replacement: const CenterCircularProgressIndicator(),
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (_selectedSize != null && _selectedColor != null) {
+                      if (AuthController().isTokenNotNull) {
+                        String color = colorToString(_selectedColor!);
+                        final response = await addToCartController.addToCart(
+                            widget.productId, color, _selectedSize!);
+
+                        if (response) {
+                          Get.showSnackbar(const GetSnackBar(
+                            title: 'Well Done!',
+                            message: 'Add to cart, successfully!',
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.green,
+                          ));
+                        } else {
+                          Get.showSnackbar(const GetSnackBar(
+                            title: 'Failed!',
+                            message: 'Add to cart, failed!',
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.red,
+                          ));
+                        }
+                      } else {
+                        Get.to(const LoginScreen());
+                      }
+                    } else {
+                      Get.showSnackbar(const GetSnackBar(
+                        title: 'Failed!',
+                        message: 'Please check size and color.',
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                      ));
+                    }
+                  },
+                  child: const Text("Add To Cart")),
+            );
+          }),
         ],
       ),
     );
   }
+
+  Color getColorFromString(String color) {
+    String colorName = color.toLowerCase();
+    if (colorName == "red") {
+      return Colors.red;
+    } else if (colorName == "green") {
+      return Colors.green;
+    } else if (colorName == 'white') {
+      return Colors.white;
+    } else {
+      return Colors.grey;
+    }
+  }
+
+  String colorToString(Color colorCode) {
+    if (colorCode == Colors.red) {
+      return "Red";
+    } else if (colorCode == Colors.green) {
+      return "Green";
+    } else if (colorCode == Colors.white) {
+      return "White";
+    } else {
+      return "Grey";
+    }
+  }
+
+  // Color getColorFromString(String colorCode) {
+  //   String code = colorCode.replaceAll("#", '');
+  //   String hexCode = 'FF$code';
+  //   return Color(int.parse('0x$hexCode'));
+  // }
+  //
+  // String colorToHashColorCode(String colorCode) {
+  //   return colorCode
+  //       .toString()
+  //       .replaceAll("0xff", "#")
+  //       .replaceAll("Color(", '')
+  //       .replaceAll(")", '');
+  // }
 }

@@ -21,6 +21,7 @@ class _ColorSelectorState extends State<ColorSelector> {
   void initState() {
     super.initState();
     _selectedColor = widget.colors.first;
+    widget.onChange(_selectedColor);
   }
 
   @override

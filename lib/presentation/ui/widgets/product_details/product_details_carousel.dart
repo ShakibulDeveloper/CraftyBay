@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 class ProductDetailsCarousel extends StatefulWidget {
   final double? height;
+  final List<String> urls;
   const ProductDetailsCarousel({
     super.key,
     this.height,
+    required this.urls,
   });
 
   @override
@@ -29,18 +31,15 @@ class _ProductDetailsCarouselState extends State<ProductDetailsCarousel> {
             autoPlay: false,
             viewportFraction: 1,
           ),
-          items: [1, 2, 3, 4, 5].map((i) {
+          items: widget.urls.map((url) {
             return Builder(
               builder: (BuildContext context) {
                 return Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
                       color: Colors.grey,
-                    ),
-                    child: Text(
-                      'text $i',
-                      style: const TextStyle(fontSize: 16.0),
-                    ));
+                      image: DecorationImage(image: NetworkImage(url))),
+                );
               },
             );
           }).toList(),
@@ -56,7 +55,7 @@ class _ProductDetailsCarouselState extends State<ProductDetailsCarousel> {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (int i = 0; i < 5; i++)
+                  for (int i = 0; i < widget.urls.length; i++)
                     Container(
                       height: 13,
                       width: 13,

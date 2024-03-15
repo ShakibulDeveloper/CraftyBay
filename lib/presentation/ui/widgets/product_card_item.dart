@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductCardItem extends StatefulWidget {
-  final Product productList;
+  final ProductModel productList;
 
   const ProductCardItem({
     super.key,
@@ -21,10 +21,12 @@ class _ProductCardItemState extends State<ProductCardItem> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
+      width: 135,
       child: GestureDetector(
         onTap: () {
-          Get.to(const ProductDetailsScreen());
+          Get.to(ProductDetailsScreen(
+            productId: widget.productList.id!,
+          ));
         },
         child: Card(
           child: Column(
@@ -39,7 +41,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 child: Center(
                   child: Image.network(
                     widget.productList.image.toString() ?? '',
-                    width: 100,
+                    width: 90,
                   ),
                 ),
               ),

@@ -1,6 +1,8 @@
+import 'package:crafty_bay/presentation/state_holder/cart_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holder/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/carts/cart_product_item.dart';
+import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +14,14 @@ class CartsScreen extends StatefulWidget {
 }
 
 class _CartsScreenState extends State<CartsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Get.find<CartListController>().getCartList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,18 +44,26 @@ class _CartsScreenState extends State<CartsScreen> {
       body: Column(
         children: [
           Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return const CartProductItem();
-                    },
+            child:
+                GetBuilder<CartListController>(builder: (cartListController) {
+              if (cartListController.inProgress == true) {
+                return const CenterCircularProgressIndicator();
+              }
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: cartListController
+                              .cartListModel.cartItemList?.length ??
+                          0,
+                      itemBuilder: (context, index) {
+                        return const CartProductItem();
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ),
           totalPriceAndCheckOutSection,
         ],

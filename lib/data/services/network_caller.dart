@@ -10,7 +10,7 @@ class NetworkCaller {
     log(url);
     log(token.toString());
     final response = await get(Uri.parse(url), headers: {
-      'token': token.toString(),
+      'token': (token ?? AuthController.token).toString(),
       'Content-Type': 'application/json',
     });
     log(response.statusCode.toString());
@@ -46,12 +46,12 @@ class NetworkCaller {
     log(body.toString());
     log('token check');
     log(token.toString());
-    final response = await post(Uri.parse(url),
-        body: jsonEncode(body),
-        headers: {
-          'token': token.toString(),
-          'Content-type': 'application/json'
-        });
+    log(AuthController.token.toString());
+    final response =
+        await post(Uri.parse(url), body: jsonEncode(body), headers: {
+      'token': (token ?? AuthController.token.toString()).toString(),
+      'Content-type': 'application/json'
+    });
     log(response.statusCode.toString());
     log(response.body.toString());
     if (response.statusCode == 200) {
